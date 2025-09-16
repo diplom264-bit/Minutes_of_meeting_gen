@@ -2,12 +2,20 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+import streamlit as st
 
 load_dotenv()
 
 def generate_mom(transcript):
     """Generate Minutes of Meeting using OpenRouter API"""
-    api_key = os.getenv('OPENROUTER_API_KEY')
+    # Try Streamlit secrets first, then environment variables
+    try:
+        api_key = st.secrets["OPENROUTER_API_KEY"]
+    except:
+        api_key = os.getenv('OPENROUTER_API_KEY')
+    
+    if not api_key:
+        raise Exception("OpenRouter API key not found in secrets or environment variables")
     
     prompt = """You are a meeting summarization assistant.
 Your job is to transform raw meeting transcripts into clear, structured Minutes of Meeting (MoM).  

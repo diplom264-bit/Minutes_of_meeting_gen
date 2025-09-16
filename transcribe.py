@@ -2,12 +2,20 @@ import requests
 import time
 import os
 from dotenv import load_dotenv
+import streamlit as st
 
 load_dotenv()
 
 def transcribe_audio(audio_file_path):
     """Transcribe audio using AssemblyAI API"""
-    api_key = os.getenv('ASSEMBLYAI_API_KEY')
+    # Try Streamlit secrets first, then environment variables
+    try:
+        api_key = st.secrets["ASSEMBLYAI_API_KEY"]
+    except:
+        api_key = os.getenv('ASSEMBLYAI_API_KEY')
+    
+    if not api_key:
+        raise Exception("AssemblyAI API key not found in secrets or environment variables")
     
     # Upload file
     upload_url = "https://api.assemblyai.com/v2/upload"
