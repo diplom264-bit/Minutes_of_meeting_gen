@@ -8,10 +8,10 @@ load_dotenv()
 
 def generate_mom(transcript):
     """Generate Minutes of Meeting using OpenRouter API"""
-    # Try Streamlit secrets first, then environment variables
+    # Read from Streamlit secrets (deployed) or environment (local)
     try:
         api_key = st.secrets["OPENROUTER_API_KEY"]
-    except:
+    except (KeyError, FileNotFoundError):
         api_key = os.getenv('OPENROUTER_API_KEY')
     
     if not api_key:
@@ -53,7 +53,7 @@ TRANSCRIPT:
     }
     
     data = {
-        "model": "meta-llama/llama-3.2-3b-instruct:free",
+        "model": "deepseek/deepseek-chat",
         "messages": [
             {"role": "user", "content": prompt}
         ]

@@ -8,10 +8,10 @@ load_dotenv()
 
 def transcribe_audio(audio_file_path):
     """Transcribe audio using AssemblyAI API"""
-    # Try Streamlit secrets first, then environment variables
+    # Read from Streamlit secrets (deployed) or environment (local)
     try:
         api_key = st.secrets["ASSEMBLYAI_API_KEY"]
-    except:
+    except (KeyError, FileNotFoundError):
         api_key = os.getenv('ASSEMBLYAI_API_KEY')
     
     if not api_key:
