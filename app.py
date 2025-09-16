@@ -4,6 +4,7 @@ import os
 import tempfile
 from transcribe import transcribe_audio
 from llm import generate_mom
+from docx_utils import create_mom_docx
 
 st.title("📝 Minutes of Meeting Generator")
 
@@ -15,15 +16,36 @@ if uploaded_file and st.button("Generate Minutes of Meeting"):
         temp_path = tmp_file.name
     
     try:
-        with st.spinner("Processing..."):
+        with st.spinner("Processing audio..."):
             transcript = transcribe_audio(temp_path)
             mom_data = generate_mom(transcript)
         
-        st.text_area("Transcript", transcript, height=200)
-        st.json(mom_data)
+        st.success("✅ Processing completed!")
+        
+        st.subheader("📄 Transcript")
+        st.text_area("Meeting Transcript", transcript, height=200)
+        
+        st.subheader("📋 Minutes of Meeting")
+        with st.expander("View JSON Data", expanded=True):
+            st.json(mom_data)
+        
+        # Generate DOCX for download
+        docx_filename = "meeting_minutes.docx"
+        create_mom_docx(mom_data, docx_filename)
+        
+        with open(docx_filename, "rb") as file:
+            st.download_button(
+                label="📥 Download DOCX",
+                data=file.read(),
+                file_name=docx_filename,
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
         
         os.unlink(temp_path)
+        if os.path.exists(docx_filename):
+            os.unlink(docx_filename)
         
     except Exception as e:
-        st.error(f"Error: {str(e)}")
-        os.unlink(temp_path)
+        st.error(f"❌ Error: {str(e)}")
+        if os.path.exists(temp_path):
+            os.unlink(temp_path)
