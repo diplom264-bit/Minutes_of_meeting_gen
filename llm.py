@@ -21,21 +21,31 @@ def generate_mom(transcript):
     if not api_key.startswith('sk-or-'):
         raise Exception(f"Invalid API key format. Key starts with: {api_key[:10]}...")
     
-    prompt = f"""Create meeting minutes JSON from transcript:
+    prompt = """You are a meeting summarization assistant.
+Your job is to transform raw meeting transcripts into clear, structured Minutes of Meeting (MoM).  
+Always return output as a **valid JSON object** following the schema below.  
+Do not invent content not present in the transcript.
 
-Required format:
-{{
-  "meeting_title": "string",
-  "date": "string", 
-  "attendees": ["names"],
-  "agenda_items": ["topics"],
-  "key_points": ["main discussions"],
-  "action_items": [{{"task": "string", "owner": "string", "due_date": "string"}}],
-  "next_steps": ["follow-ups"],
-  "decisions_made": ["decisions"]
-}}
+JSON SCHEMA:
+{
+  "meeting_title": string,
+  "date": string,
+  "attendees": [string],
+  "agenda_items": [string],
+  "key_points": [string],
+  "action_items": [
+    {
+      "task": string,
+      "owner": string,
+      "due_date": string
+    }
+  ],
+  "next_steps": [string],
+  "decisions_made": [string]
+}
 
-Transcript: {transcript}"""
+TRANSCRIPT:
+""" + transcript
 
     headers = {
         "Authorization": f"Bearer {api_key}",
