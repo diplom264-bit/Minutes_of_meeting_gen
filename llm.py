@@ -21,31 +21,21 @@ def generate_mom(transcript):
     if not api_key.startswith('sk-or-'):
         raise Exception(f"Invalid API key format. Key starts with: {api_key[:10]}...")
     
-    prompt = """You are a meeting summarization assistant.
-Your job is to transform raw meeting transcripts into clear, structured Minutes of Meeting (MoM).  
-Always return output as a **valid JSON object** following the schema below.  
-Do not invent content not present in the transcript.
+    prompt = f"""Create meeting minutes JSON from transcript:
 
-JSON SCHEMA:
-{
-  "meeting_title": string,
-  "date": string,
-  "attendees": [string],
-  "agenda_items": [string],
-  "key_points": [string],
-  "action_items": [
-    {
-      "task": string,
-      "owner": string,
-      "due_date": string
-    }
-  ],
-  "next_steps": [string],
-  "decisions_made": [string]
-}
+Required format:
+{{
+  "meeting_title": "string",
+  "date": "string", 
+  "attendees": ["names"],
+  "agenda_items": ["topics"],
+  "key_points": ["main discussions"],
+  "action_items": [{{"task": "string", "owner": "string", "due_date": "string"}}],
+  "next_steps": ["follow-ups"],
+  "decisions_made": ["decisions"]
+}}
 
-TRANSCRIPT:
-""" + transcript
+Transcript: {transcript}"""
 
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -53,7 +43,7 @@ TRANSCRIPT:
     }
     
     data = {
-        "model": "deepseek/deepseek-chat",
+        "model": "meta-llama/llama-3.1-8b-instruct:free",
         "messages": [
             {"role": "user", "content": prompt}
         ]
