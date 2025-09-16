@@ -61,14 +61,13 @@ TRANSCRIPT:
         json=data
     )
     
-    response_data = response.json()
-    
-    # Debug: Show full response
-    st.write(f"API Response Status: {response.status_code}")
-    st.write(f"API Response: {response_data}")
+    try:
+        response_data = response.json()
+    except:
+        raise Exception(f"Invalid JSON response. Status: {response.status_code}, Text: {response.text}")
     
     if "choices" not in response_data:
-        raise Exception(f"API Error: {response_data}")
+        raise Exception(f"Status: {response.status_code}, Response: {response_data}")
     
     result = response_data["choices"][0]["message"]["content"]
     
