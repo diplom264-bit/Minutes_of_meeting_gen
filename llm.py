@@ -65,13 +65,18 @@ TRANSCRIPT:
         json=data
     )
     
+    # Show response details for debugging
+    st.write(f"Status Code: {response.status_code}")
+    st.write(f"Response Headers: {dict(response.headers)}")
+    
     try:
         response_data = response.json()
-    except:
-        raise Exception(f"Invalid JSON response. Status: {response.status_code}, Text: {response.text}")
+        st.write(f"Response Data: {response_data}")
+    except Exception as e:
+        raise Exception(f"JSON Parse Error. Status: {response.status_code}, Text: {response.text[:500]}")
     
     if "choices" not in response_data:
-        raise Exception(f"Status: {response.status_code}, Response: {response_data}")
+        raise Exception(f"No choices in response. Full response: {response_data}")
     
     result = response_data["choices"][0]["message"]["content"]
     
