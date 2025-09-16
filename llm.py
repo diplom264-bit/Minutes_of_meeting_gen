@@ -17,6 +17,10 @@ def generate_mom(transcript):
     if not api_key:
         raise Exception("OpenRouter API key not found in secrets or environment variables")
     
+    # Debug: Check if key is being read
+    if not api_key.startswith('sk-or-'):
+        raise Exception(f"Invalid API key format. Key starts with: {api_key[:10]}...")
+    
     prompt = """You are a meeting summarization assistant.
 Your job is to transform raw meeting transcripts into clear, structured Minutes of Meeting (MoM).  
 Always return output as a **valid JSON object** following the schema below.  
