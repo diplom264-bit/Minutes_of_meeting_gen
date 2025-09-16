@@ -53,7 +53,12 @@ TRANSCRIPT:
         json=data
     )
     
-    result = response.json()["choices"][0]["message"]["content"]
+    response_data = response.json()
+    
+    if "choices" not in response_data:
+        raise Exception(f"API Error: {response_data.get('error', 'Unknown error')}")
+    
+    result = response_data["choices"][0]["message"]["content"]
     
     # Extract JSON from response
     try:
