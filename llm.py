@@ -63,8 +63,12 @@ TRANSCRIPT:
     
     response_data = response.json()
     
+    # Debug: Show full response
+    st.write(f"API Response Status: {response.status_code}")
+    st.write(f"API Response: {response_data}")
+    
     if "choices" not in response_data:
-        raise Exception(f"API Error: {response_data.get('error', 'Unknown error')}")
+        raise Exception(f"API Error: {response_data}")
     
     result = response_data["choices"][0]["message"]["content"]
     
