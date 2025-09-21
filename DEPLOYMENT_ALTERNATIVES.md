@@ -8,7 +8,7 @@ Railway supports larger applications and Docker containers.
 2. Connect your GitHub repository
 3. Add environment variables:
    - `ASSEMBLYAI_API_KEY` = `872b8b9caa2542f7ae9c252fbd584641`
-   - `OPENROUTER_API_KEY` = `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`
+   - `OPENROUTER_API_KEY` = `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`
 4. Deploy automatically
 
 ## 🐳 Render

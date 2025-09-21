@@ -7,7 +7,7 @@ services:
       - "8501:8501"
     environment:
       - ASSEMBLYAI_API_KEY=872b8b9caa2542f7ae9c252fbd584641
-      - OPENROUTER_API_KEY=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
+      - OPENROUTER_API_KEY=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
     volumes:
       - .:/app
     restart: unless-stopped
