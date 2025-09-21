@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  mom-generator:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      - ASSEMBLYAI_API_KEY=872b8b9caa2542f7ae9c252fbd584641
+      - OPENROUTER_API_KEY=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
+    volumes:
+      - .:/app
+    restart: unless-stopped
