@@ -8,11 +8,16 @@ load_dotenv()
 
 def generate_mom(transcript):
     """Generate Minutes of Meeting using OpenRouter API"""
-    # Read from Streamlit secrets (deployed) or environment (local)
-    try:
-        api_key = st.secrets["OPENROUTER_API_KEY"]
-    except (KeyError, FileNotFoundError):
-        api_key = os.getenv('OPENROUTER_API_KEY')
+    # Read from environment variables (works everywhere)
+    api_key = os.getenv('OPENROUTER_API_KEY')
+    
+    # Fallback to Streamlit secrets if available
+    if not api_key:
+        try:
+            import streamlit as st
+            api_key = st.secrets["OPENROUTER_API_KEY"]
+        except:
+            pass
     
     if not api_key:
         raise Exception("OpenRouter API key not found in secrets or environment variables")
